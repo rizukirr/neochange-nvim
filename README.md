@@ -2,9 +2,6 @@
 
 A Neovim plugin for seamless configuration branch switching with an interactive floating window interface.
 
-![License](https://img.shields.io/github/license/rizukirr/neochange.nvim)
-![CI](https://github.com/rizukirr/neochange.nvim/workflows/CI/badge.svg)
-
 ## ✨ Features
 
 - 🎨 **Interactive Floating Window** - Beautiful branch selector with vim-like navigation
