@@ -1,0 +1,35 @@
+# Lua
+*.luac
+.luacheckcache/
+
+# Testing
+tests/plenary/
+.test-results/
+
+# Development
+.DS_Store
+*.swp
+*.swo
+*~
+
+# IDE/Editor
+.vscode/
+.idea/
+*.sublime-*
+
+# OS
+Thumbs.db
+.Trash-*
+
+# Build artifacts
+build/
+dist/
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# Plugin manager artifacts (if someone clones and tests locally)
+lazy-lock.json
+packer_compiled.lua

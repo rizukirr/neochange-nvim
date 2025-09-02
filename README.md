@@ -1,0 +1,134 @@
+# NeoChange.nvim
+
+A Neovim plugin for seamless configuration branch switching with an interactive floating window interface.
+
+![License](https://img.shields.io/github/license/rizukirr/neochange.nvim)
+![CI](https://github.com/rizukirr/neochange.nvim/workflows/CI/badge.svg)
+
+## ✨ Features
+
+- 🎨 **Interactive Floating Window** - Beautiful branch selector with vim-like navigation
+- ⚡ **Direct Branch Switching** - Quick switching with tab completion  
+- 🔄 **Automatic Reload** - Configuration reloads automatically after branch switch
+- 👁️ **Visual Indicators** - Current branch clearly marked with ● symbol
+- 🛠️ **Zero Configuration** - Works out of the box
+
+## 📦 Installation
+
+### Requirements
+
+- Neovim 0.7+ with Lua support
+- Git repository in your config directory
+- Multiple configuration branches
+
+### Using [lazy.nvim](https://github.com/folke/lazy.nvim)
+
+```lua
+{
+  "rizukirr/neochange.nvim"
+}
+```
+
+### Using [packer.nvim](https://github.com/wbthomason/packer.nvim)
+
+```lua
+use 'rizukirr/neochange.nvim'
+```
+
+### Using [vim-plug](https://github.com/junegunn/vim-plug)
+
+```vim
+Plug 'rizukirr/neochange.nvim'
+```
+
+## 🎯 Usage
+
+### Interactive Branch Selector
+```vim
+:NeoChange
+```
+Opens a floating window with all available branches.
+
+**Controls:**
+- `j` / `↓` - Move down
+- `k` / `↑` - Move up  
+- `Enter` / `Space` - Select branch
+- `q` / `Esc` - Close window
+
+### Direct Branch Switching
+```vim
+:NeoChange python-nvim
+```
+Switches directly to the specified branch with tab completion.
+
+## 🏗️ Setup Example
+
+Structure your Neovim config as a git repository:
+
+```
+~/.config/nvim/
+├── init.lua
+├── lua/
+│   ├── config/
+│   └── plugins/
+└── .git/
+```
+
+Create different branches for different configurations:
+
+```bash
+# Create branches for different setups
+git checkout -b python-nvim    # Python development config
+git checkout -b cpp-nvim       # C++ development config  
+git checkout -b minimal        # Lightweight config
+
+# Use NeoChange to switch between them
+:NeoChange python-nvim
+```
+
+## ⚙️ Configuration
+
+**No configuration required!** NeoChange works automatically after installation.
+
+The plugin auto-loads and registers the `:NeoChange` command when Neovim starts.
+
+## 📖 Documentation
+
+Complete documentation is available within Neovim:
+
+```vim
+:h neochange
+```
+
+## 🤝 Contributing
+
+Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details.
+
+### Development Setup
+
+```bash
+git clone https://github.com/rizukirr/neochange.nvim
+cd neochange.nvim
+make install-dev  # Install development dependencies
+make test         # Run tests
+```
+
+## 🐛 Issues & Support
+
+- 📋 [Report Issues](https://github.com/rizukirr/neochange.nvim/issues)
+- 💬 [Discussions](https://github.com/rizukirr/neochange.nvim/discussions)
+- 📖 Documentation: `:h neochange`
+
+## 📜 License
+
+MIT License - see [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- Inspired by the need for easy configuration management
+- Built with love for the Neovim community
+- Thanks to all contributors!
+
+---
+
+⭐ **Star this repository if you find it useful!**
