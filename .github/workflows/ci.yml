@@ -17,8 +17,9 @@ jobs:
     - uses: actions/checkout@v4
 
     - name: Install Neovim
-      uses: rhymond/setup-nvim@v1
+      uses: rhysd/action-setup-vim@v1
       with:
+        neovim: true
         version: ${{ matrix.neovim_version }}
 
     - name: Install Lua and LuaRocks
@@ -31,28 +32,21 @@ jobs:
 
     - name: Install dependencies
       run: |
-        # Install plenary for testing
-        git clone --depth 1 https://github.com/nvim-lua/plenary.nvim ~/.local/share/nvim/site/pack/vendor/start/plenary.nvim
-        
         # Install luacheck for linting
         luarocks install luacheck
+        
+        # Install plenary for testing using our Makefile
+        make install-dev
 
     - name: Install stylua
-      uses: JohnnyMorganz/stylua-action@v4
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        version: latest
-
-    - name: Run linting
-      run: luacheck lua/ tests/ --globals vim
-
-    - name: Check formatting
-      run: stylua --check lua/ tests/
-
-    - name: Run tests
       run: |
-        nvim --version
-        nvim --headless --noplugin -u tests/minimal_init.lua -c "PlenaryBustedDirectory tests/"
+        curl -L -o stylua.zip https://github.com/JohnnyMorganz/StyLua/releases/latest/download/stylua-linux-x86_64.zip
+        unzip stylua.zip
+        chmod +x stylua
+        sudo mv stylua /usr/local/bin/
+
+    - name: Run CI checks
+      run: make ci
 
   compatibility:
     runs-on: ubuntu-latest
@@ -62,13 +56,15 @@ jobs:
     - uses: actions/checkout@v4
 
     - name: Test Neovim 0.7 compatibility
-      uses: rhymond/setup-nvim@v1
+      uses: rhysd/action-setup-vim@v1
       with:
+        neovim: true
         version: 'v0.7.0'
 
     - name: Install plenary
       run: |
-        git clone --depth 1 https://github.com/nvim-lua/plenary.nvim ~/.local/share/nvim/site/pack/vendor/start/plenary.nvim
+        mkdir -p ~/.local/share/nvim/lazy
+        git clone --depth 1 https://github.com/nvim-lua/plenary.nvim ~/.local/share/nvim/lazy/plenary.nvim
 
     - name: Test basic functionality
       run: |
