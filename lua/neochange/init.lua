@@ -19,7 +19,8 @@ local default_config = {
 local config = vim.deepcopy(default_config)
 
 local function execute_git_command(cmd)
-    local handle = io.popen("cd " .. config.config_path .. " && " .. cmd .. " 2>&1")
+    local git_dir = M._test_dir or config.config_path
+    local handle = io.popen("cd " .. git_dir .. " && " .. cmd .. " 2>&1")
     if not handle then
         return nil, "Failed to execute command"
     end
@@ -163,6 +164,11 @@ end
 -- Getter for current config
 function M.get_config()
     return config
+end
+
+-- Test helper to set test directory
+function M._set_test_dir(dir)
+    M._test_dir = dir
 end
 
 return M

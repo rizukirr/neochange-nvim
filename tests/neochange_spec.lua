@@ -9,32 +9,36 @@ describe("NeoChange core functionality", function()
         vim.fn.mkdir(test_dir, "p")
         vim.cmd("cd " .. test_dir)
 
+        -- Set test directory for neochange
+        neochange._set_test_dir(test_dir)
+
         -- Initialize git repo and create some branches for testing
-        vim.fn.system("git init")
-        vim.fn.system("git config user.email 'test@example.com'")
-        vim.fn.system("git config user.name 'Test User'")
-        vim.fn.system("echo 'test' > test.txt")
-        vim.fn.system("git add .")
-        vim.fn.system("git commit -m 'initial commit'")
-        vim.fn.system("git checkout -b feature-branch")
-        vim.fn.system("git checkout main")
+        vim.fn.system("cd " .. test_dir .. " && git init --initial-branch=main")
+        vim.fn.system("cd " .. test_dir .. " && git config user.email 'test@example.com'")
+        vim.fn.system("cd " .. test_dir .. " && git config user.name 'Test User'")
+        vim.fn.system("cd " .. test_dir .. " && echo 'test' > test.txt")
+        vim.fn.system("cd " .. test_dir .. " && git add .")
+        vim.fn.system("cd " .. test_dir .. " && git commit -m 'initial commit'")
+        vim.fn.system("cd " .. test_dir .. " && git checkout -b feature-branch")
+        vim.fn.system("cd " .. test_dir .. " && git checkout main")
     end)
 
     after_each(function()
-        -- Clean up test directory
+        -- Clean up test directory and reset test override
         if test_dir then
             vim.fn.delete(test_dir, "rf")
         end
+        neochange._set_test_dir(nil)
     end)
 
     describe("get_current_branch", function()
         it("should return current git branch", function()
             local current_branch, err = neochange.get_current_branch()
 
-            assert.is_nil(err)
-            assert.is_not_nil(current_branch)
-            assert.is_string(current_branch)
-            assert.is_true(#current_branch > 0)
+            assert.is_nil(err, "Error should be nil, got: " .. tostring(err))
+            assert.is_not_nil(current_branch, "Current branch should not be nil")
+            assert.is_string(current_branch, "Current branch should be a string")
+            assert.is_true(#current_branch > 0, "Current branch name should not be empty")
         end)
     end)
 
@@ -42,10 +46,10 @@ describe("NeoChange core functionality", function()
         it("should return list of available branches", function()
             local branches, err = neochange.get_branches()
 
-            assert.is_nil(err)
-            assert.is_not_nil(branches)
-            assert.is_table(branches)
-            assert.is_true(#branches > 0)
+            assert.is_nil(err, "Error should be nil, got: " .. tostring(err))
+            assert.is_not_nil(branches, "Branches should not be nil")
+            assert.is_table(branches, "Branches should be a table")
+            assert.is_true(#branches > 0, "Should have at least one branch")
         end)
 
         it("should include current branch in list", function()
