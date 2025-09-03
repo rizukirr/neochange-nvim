@@ -17,7 +17,7 @@ jobs:
     - uses: actions/checkout@v4
 
     - name: Install Neovim
-      uses: rhymond/setup-nvim@v1
+      uses: MeanderingProgrammer/setup-nvim@v3
       with:
         version: ${{ matrix.neovim_version }}
 
@@ -63,7 +63,7 @@ jobs:
     - uses: actions/checkout@v4
 
     - name: Test Neovim 0.7 compatibility
-      uses: rhymond/setup-nvim@v1
+      uses: MeanderingProgrammer/setup-nvim@v3
       with:
         version: 'v0.7.0'
 
