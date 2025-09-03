@@ -20,12 +20,14 @@ local function complete_branches(arg_lead)
     return matches
 end
 
-function M.setup()
+function M.setup(config)
+    config = config or {}
+
     vim.api.nvim_create_user_command("NeoChange", function(opts)
         local branch_name = opts.args
 
         if branch_name == "" then
-            ui.show_branch_selector()
+            ui.show_branch_selector(config)
             return
         end
 

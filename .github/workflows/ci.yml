@@ -31,12 +31,11 @@ jobs:
 
     - name: Install dependencies
       run: |
-        # Install plenary for testing
-        mkdir -p ~/.local/share/nvim/lazy
-        git clone --depth 1 https://github.com/nvim-lua/plenary.nvim ~/.local/share/nvim/lazy/plenary.nvim
-        
         # Install luacheck for linting
         luarocks install luacheck
+        
+        # Install plenary for testing using our Makefile
+        make install-dev
 
     - name: Install stylua
       uses: JohnnyMorganz/stylua-action@v4
@@ -44,16 +43,8 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         version: latest
 
-    - name: Run linting
-      run: luacheck lua/ tests/ --globals vim
-
-    - name: Check formatting
-      run: stylua --check lua/ tests/
-
-    - name: Run tests
-      run: |
-        nvim --version
-        nvim --headless --noplugin -u tests/minimal_init.lua -c "lua require('plenary.test_harness').test_directory('tests/', {minimal_init = 'tests/minimal_init.lua'})"
+    - name: Run CI checks
+      run: make ci
 
   compatibility:
     runs-on: ubuntu-latest

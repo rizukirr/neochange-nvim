@@ -1,9 +1,25 @@
 local M = {}
 
-local config_path = vim.fn.stdpath("config")
+-- Default configuration
+local default_config = {
+    config_path = vim.fn.stdpath("config"),
+    auto_reload = true,
+    reload_delay = 100,
+    notify_on_success = true,
+    notify_on_error = true,
+    ui = {
+        border = "rounded",
+        title = "NeoChange - Branch Selector",
+        width_ratio = 0.6,
+        height_ratio = 0.4,
+    },
+}
+
+-- Store the merged configuration
+local config = vim.deepcopy(default_config)
 
 local function execute_git_command(cmd)
-    local handle = io.popen("cd " .. config_path .. " && " .. cmd .. " 2>&1")
+    local handle = io.popen("cd " .. config.config_path .. " && " .. cmd .. " 2>&1")
     if not handle then
         return nil, "Failed to execute command"
     end
@@ -94,14 +110,22 @@ function M.switch_to_branch(branch_name)
     local success, message = switch_branch(branch_name)
 
     if success then
-        vim.notify(message, vim.log.levels.INFO)
+        if config.notify_on_success then
+            vim.notify(message, vim.log.levels.INFO)
+        end
 
-        vim.defer_fn(function()
-            reload_config()
-            vim.notify("Configuration reloaded", vim.log.levels.INFO)
-        end, 100)
+        if config.auto_reload then
+            vim.defer_fn(function()
+                reload_config()
+                if config.notify_on_success then
+                    vim.notify("Configuration reloaded", vim.log.levels.INFO)
+                end
+            end, config.reload_delay)
+        end
     else
-        vim.notify(message, vim.log.levels.ERROR)
+        if config.notify_on_error then
+            vim.notify(message, vim.log.levels.ERROR)
+        end
     end
 
     return success, message
@@ -113,6 +137,32 @@ end
 
 function M.get_current_branch()
     return get_current_branch()
+end
+
+function M.setup(opts)
+    opts = opts or {}
+
+    -- Merge user options with defaults
+    config = vim.tbl_deep_extend("force", default_config, opts)
+
+    -- Validate configuration
+    if not vim.fn.isdirectory(config.config_path) then
+        vim.notify("NeoChange: Invalid config_path: " .. config.config_path, vim.log.levels.ERROR)
+        return false
+    end
+
+    -- Initialize commands (only if not already initialized)
+    if not vim.g.loaded_neochange_commands then
+        require("neochange.commands").setup(config)
+        vim.g.loaded_neochange_commands = true
+    end
+
+    return true
+end
+
+-- Getter for current config
+function M.get_config()
+    return config
 end
 
 return M

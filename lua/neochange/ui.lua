@@ -2,9 +2,12 @@ local neochange = require("neochange")
 
 local M = {}
 
-local function create_floating_window(content, title)
-    local width = 60
-    local height = math.min(#content + 4, 15)
+local function create_floating_window(content, title, config)
+    config = config or {}
+    local ui_config = config.ui or {}
+
+    local width = math.floor(vim.o.columns * (ui_config.width_ratio or 0.6))
+    local height = math.min(#content + 4, math.floor(vim.o.lines * (ui_config.height_ratio or 0.4)))
 
     local row = math.ceil((vim.o.lines - height) / 2 - 1)
     local col = math.ceil((vim.o.columns - width) / 2)
@@ -15,7 +18,7 @@ local function create_floating_window(content, title)
         height = height,
         row = row,
         col = col,
-        border = "rounded",
+        border = ui_config.border or "rounded",
     }
 
     local buf = vim.api.nvim_create_buf(false, true)
@@ -62,7 +65,10 @@ local function highlight_current_branch(buf, current_branch, branches, title_off
     end
 end
 
-function M.show_branch_selector()
+function M.show_branch_selector(config)
+    config = config or {}
+    local ui_config = config.ui or {}
+
     local branches, err = neochange.get_branches()
     if err then
         vim.notify("Failed to get branches: " .. err, vim.log.levels.ERROR)
@@ -92,8 +98,8 @@ function M.show_branch_selector()
         table.insert(display_lines, prefix .. branch)
     end
 
-    local buf, win =
-        create_floating_window(display_lines, "NeoChange - Select Configuration Branch")
+    local title = ui_config.title or "NeoChange - Branch Selector"
+    local buf, win = create_floating_window(display_lines, title, config)
 
     local title_offset = 4
     highlight_current_branch(buf, current_branch, branches, title_offset)
