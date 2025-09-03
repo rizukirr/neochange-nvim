@@ -1,9 +1,30 @@
 local neochange = require("neochange")
 
 describe("NeoChange core functionality", function()
+    local test_dir
+    
     before_each(function()
-        -- Setup test environment
-        vim.cmd("cd " .. vim.fn.stdpath("config"))
+        -- Create a temporary test directory with git repo
+        test_dir = vim.fn.tempname()
+        vim.fn.mkdir(test_dir, "p")
+        vim.cmd("cd " .. test_dir)
+        
+        -- Initialize git repo and create some branches for testing
+        vim.fn.system("git init")
+        vim.fn.system("git config user.email 'test@example.com'")
+        vim.fn.system("git config user.name 'Test User'")
+        vim.fn.system("echo 'test' > test.txt")
+        vim.fn.system("git add .")
+        vim.fn.system("git commit -m 'initial commit'")
+        vim.fn.system("git checkout -b feature-branch")
+        vim.fn.system("git checkout main")
+    end)
+    
+    after_each(function()
+        -- Clean up test directory
+        if test_dir then
+            vim.fn.delete(test_dir, "rf")
+        end
     end)
 
     describe("get_current_branch", function()
