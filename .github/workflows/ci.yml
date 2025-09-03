@@ -32,7 +32,8 @@ jobs:
     - name: Install dependencies
       run: |
         # Install plenary for testing
-        git clone --depth 1 https://github.com/nvim-lua/plenary.nvim ~/.local/share/nvim/site/pack/vendor/start/plenary.nvim
+        mkdir -p ~/.local/share/nvim/lazy
+        git clone --depth 1 https://github.com/nvim-lua/plenary.nvim ~/.local/share/nvim/lazy/plenary.nvim
         
         # Install luacheck for linting
         luarocks install luacheck
@@ -52,7 +53,7 @@ jobs:
     - name: Run tests
       run: |
         nvim --version
-        nvim --headless --noplugin -u tests/minimal_init.lua -c "PlenaryBustedDirectory tests/"
+        nvim --headless --noplugin -u tests/minimal_init.lua -c "lua require('plenary.test_harness').test_directory('tests/', {minimal_init = 'tests/minimal_init.lua'})"
 
   compatibility:
     runs-on: ubuntu-latest
@@ -68,7 +69,8 @@ jobs:
 
     - name: Install plenary
       run: |
-        git clone --depth 1 https://github.com/nvim-lua/plenary.nvim ~/.local/share/nvim/site/pack/vendor/start/plenary.nvim
+        mkdir -p ~/.local/share/nvim/lazy
+        git clone --depth 1 https://github.com/nvim-lua/plenary.nvim ~/.local/share/nvim/lazy/plenary.nvim
 
     - name: Test basic functionality
       run: |

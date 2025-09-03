@@ -33,3 +33,4 @@ dist/
 # Plugin manager artifacts (if someone clones and tests locally)
 lazy-lock.json
 packer_compiled.lua
+CLAUDE.md

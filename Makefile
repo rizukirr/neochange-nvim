@@ -3,7 +3,7 @@
 # Test commands
 test:
 	@echo "Running NeoChange tests..."
-	nvim --headless --noplugin -u tests/minimal_init.lua -c "PlenaryBustedDirectory tests/"
+	nvim --headless --noplugin -u tests/minimal_init.lua -c "lua require('plenary.test_harness').test_directory('tests/', {minimal_init = 'tests/minimal_init.lua'})"
 
 test-watch:
 	@echo "Running tests in watch mode..."
