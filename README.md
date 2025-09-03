@@ -109,9 +109,21 @@ Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for det
 ```bash
 git clone https://github.com/rizukirr/neochange.nvim
 cd neochange.nvim
-make install-dev  # Install development dependencies
-make test         # Run tests
+make setup        # Set up development environment
+make ci           # Run all CI checks (format, lint, test)
 ```
+
+### Development Commands
+
+- `make setup` - Set up development environment with all dependencies
+- `make test` - Run all tests using plenary.nvim
+- `make test-watch` - Run tests in watch mode (requires entr)
+- `make lint` - Run luacheck linter on lua/ and tests/
+- `make format` - Format code with stylua
+- `make format-check` - Check code formatting without changes
+- `make install-dev` - Install development dependencies (plenary.nvim)
+- `make ci` - Run complete CI suite (format-check, lint, test)
+- `make clean` - Clean up cache files
 
 ## 🐛 Issues & Support
 
