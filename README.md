@@ -22,20 +22,20 @@ A Neovim plugin for seamless configuration branch switching with an interactive 
 
 ```lua
 {
-  "rizukirr/neochange.nvim"
+  "rrxxyz/neochange.nvim"
 }
 ```
 
 ### Using [packer.nvim](https://github.com/wbthomason/packer.nvim)
 
 ```lua
-use 'rizukirr/neochange.nvim'
+use 'rrxxyz/neochange.nvim'
 ```
 
 ### Using [vim-plug](https://github.com/junegunn/vim-plug)
 
 ```vim
-Plug 'rizukirr/neochange.nvim'
+Plug 'rrxxyz/neochange.nvim'
 ```
 
 ## 🎯 Usage
