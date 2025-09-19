@@ -125,28 +125,26 @@ describe("NeoChange core functionality", function()
 end)
 
 describe("NeoChange UI functionality", function()
-    -- local ui = require("neochange.ui") -- Commented out since ui is not used in tests
+    local ui = require("neochange.ui")
 
     describe("show_branch_selector", function()
         it("should not error when called", function()
             assert.has_no.errors(function()
-                -- Mock vim functions to avoid actual UI creation in tests
-                local original_create_buf = vim.api.nvim_create_buf
-                local original_open_win = vim.api.nvim_open_win
+                -- Mock vim.ui.select to avoid actual UI creation in tests
+                local original_ui_select = vim.ui.select
 
-                vim.api.nvim_create_buf = function()
-                    return 1
-                end
-                vim.api.nvim_open_win = function()
-                    return 1
+                vim.ui.select = function(items, opts, callback)
+                    -- Simulate user selecting the first item
+                    if callback and #items > 0 then
+                        callback(items[1])
+                    end
                 end
 
                 -- This would normally show UI, but we're just testing it doesn't crash
-                -- ui.show_branch_selector()
+                ui.show_branch_selector()
 
-                -- Restore original functions
-                vim.api.nvim_create_buf = original_create_buf
-                vim.api.nvim_open_win = original_open_win
+                -- Restore original function
+                vim.ui.select = original_ui_select
             end)
         end)
     end)
